@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "intermediate-v2",
+    "slug": "intermediate-v2",
+    "scheme": "intermediate-v2",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png",
+        "softwareKeyboardLayoutMode": "resize"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.intermediatev2"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar"
+    ]
+  }
+}
