@@ -1,11 +1,13 @@
 import { themeColors } from '@/theme';
 import { Button, ButtonSpinner, ButtonText } from '../ui/button';
+import { cn } from '@gluestack-ui/utils/nativewind-utils';
 
 type SubmitButtonProps = {
   onPress: () => void;
   isSubmitting?: boolean;
   title?: string;
   isSubmittingTitle?: string;
+  className?: string;
 };
 
 const FormButton = ({
@@ -13,10 +15,15 @@ const FormButton = ({
   isSubmitting = false,
   title = 'Submit',
   isSubmittingTitle = 'Submitting ...',
+  className,
 }: SubmitButtonProps) => {
   return (
     <Button
-      className={`mt-2 ${isSubmitting ? 'opacity-60' : undefined}`}
+      className={cn(
+        className,
+        `mt-2 bg-primary ${isSubmitting ? 'opacity-60' : ''}`,
+      )}
+      variant="default"
       onPress={onPress}
       disabled={isSubmitting}
     >

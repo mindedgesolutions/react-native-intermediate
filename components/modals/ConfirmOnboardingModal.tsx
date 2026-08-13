@@ -34,7 +34,7 @@ const ConfirmOnboardingModal = () => {
       <Button
         variant="default"
         size="default"
-        className="max-w-32"
+        className="max-w-32 bg-app-orange-foreground"
         onPress={() => setShowModal(true)}
       >
         <ButtonText>Let me in!</ButtonText>
@@ -47,7 +47,7 @@ const ConfirmOnboardingModal = () => {
         size="md"
       >
         <ModalBackdrop />
-        <ModalContent className="p-4">
+        <ModalContent className="p-4 bg-card">
           <ModalHeader>
             <Heading size="lg">Confirm</Heading>
             <ModalCloseButton>

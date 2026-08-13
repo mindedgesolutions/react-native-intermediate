@@ -80,6 +80,7 @@ const NewPlantScreen = () => {
         enableOnAndroid
         extraScrollHeight={20}
         keyboardShouldPersistTaps="handled"
+        style={{ backgroundColor: themeColors.colorWhite }}
       >
         <ScreenWrapper className="p-8 py-4">
           <VStack className="flex gap-4">
@@ -97,7 +98,7 @@ const NewPlantScreen = () => {
               </ButtonText>
             </Button>
             <View>
-              <Text>Name of the plant</Text>
+              <Text className="text-primary">Name of the plant</Text>
               <FormInput
                 control={form.control}
                 name="name"
@@ -107,7 +108,9 @@ const NewPlantScreen = () => {
               />
             </View>
             <View>
-              <Text>Watering frequency (every x days)</Text>
+              <Text className="text-primary">
+                Watering frequency (every x days)
+              </Text>
               <FormInput
                 control={form.control}
                 name="frequency"
@@ -123,8 +126,8 @@ const NewPlantScreen = () => {
               title="Submit"
               isSubmittingTitle="Submitting ..."
             />
-            <Button variant="outline" onPress={reset}>
-              <ButtonText>Reset</ButtonText>
+            <Button variant="secondary" onPress={reset}>
+              <ButtonText className={themeColors.colorBlack}>Reset</ButtonText>
             </Button>
           </VStack>
         </ScreenWrapper>

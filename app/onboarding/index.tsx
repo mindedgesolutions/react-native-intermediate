@@ -20,10 +20,10 @@ const OnboardingScreen = () => {
       >
         <ScreenWrapper className="w-full items-center gap-8">
           <View className="flex items-center gap-2">
-            <Text className="uppercase text-2xl font-extrabold tracking-wider">
+            <Text className="uppercase text-2xl font-extrabold tracking-wider text-primary">
               Test
             </Text>
-            <Text className="text-base font-medium tracking-wide">
+            <Text className="text-base font-medium tracking-wide text-primary">
               This is a test app
             </Text>
           </View>

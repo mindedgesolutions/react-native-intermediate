@@ -16,7 +16,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
             Uniwind.updateInsets(insets);
           }}
         >
-          <GluestackUIProvider mode="system">{children}</GluestackUIProvider>
+          <GluestackUIProvider mode="light">{children}</GluestackUIProvider>
         </SafeAreaListener>
       </SafeAreaProvider>
     </GestureHandlerRootView>
