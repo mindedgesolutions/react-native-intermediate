@@ -1,13 +1,13 @@
 import ScreenHeader from '@/components/layout/ScreenHeader';
 import ScreenWrapper from '@/components/layout/ScreenWrapper';
-import { Text } from '@/components/ui/text';
+import TextWrapper from '@/components/layout/TextWrapper';
 
 const AccountScreen = () => {
   return (
     <>
-      <ScreenHeader title="Account details" />
+      <ScreenHeader title="Account details (test page)" />
       <ScreenWrapper>
-        <Text>Account details screen</Text>
+        <TextWrapper>Account details screen</TextWrapper>
       </ScreenWrapper>
     </>
   );

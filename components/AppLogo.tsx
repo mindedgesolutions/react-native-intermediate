@@ -5,7 +5,7 @@ type LogoProps = {
   height?: number;
 };
 
-export function AppLogo({ width = 60, height = 100 }: LogoProps) {
+export function AppLogo({ width = 90, height = 150 }: LogoProps) {
   return (
     <Image
       source={require('@/assets/national-emblem.png')}

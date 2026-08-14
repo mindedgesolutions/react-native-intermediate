@@ -15,14 +15,30 @@ type AddPlantProps = {
   name: string;
   frequency: number;
   imageUri?: string;
+  plantId?: string;
+};
+
+type EditPlantProps = {
+  plantId: string;
+  name: string;
+  frequency: number;
+  imageUri?: string;
+  removeImage?: boolean;
 };
 
 type PlantsState = {
   nextId: number;
   plants: PlantType[];
   addPlant: ({ name, frequency, imageUri }: AddPlantProps) => void;
+  editPlant: ({
+    name,
+    frequency,
+    imageUri,
+    plantId,
+    removeImage,
+  }: EditPlantProps) => void;
   removePlant: (plantId: string) => void;
-  waterPlant: (plantId: string) => void;
+  waterPlant: (plantId: string, status: string) => void;
 };
 
 export const usePlantStore = create(
@@ -35,14 +51,14 @@ export const usePlantStore = create(
           ? new FileSystem.File(imageUri)
           : undefined;
 
-        const filename = `${new Date().getTime()}-${imageUri?.split('/').slice(-1)[0]}`;
+        const filename = imageUri
+          ? `${new Date().getTime()}-${imageUri?.split('/').slice(-1)[0]}`
+          : undefined;
 
-        const savedImg = new FileSystem.File(
-          FileSystem.Paths.document,
-          filename,
-        );
+        const savedImg =
+          filename && new FileSystem.File(FileSystem.Paths.document, filename);
 
-        await selectedImg?.copy(savedImg);
+        savedImg && (await selectedImg?.copy(savedImg));
 
         set((state) => {
           return {
@@ -53,12 +69,82 @@ export const usePlantStore = create(
                 id: String(state.nextId),
                 name,
                 frequency,
-                imageUri: savedImg.uri,
+                imageUri: savedImg ? savedImg?.uri : undefined,
               },
               ...state.plants,
             ],
           };
         });
+      },
+      editPlant: async ({
+        name,
+        frequency,
+        imageUri,
+        plantId,
+        removeImage,
+      }: EditPlantProps) => {
+        const existingPlant = usePlantStore
+          .getState()
+          .plants.find((plant) => plant.id === plantId);
+
+        if (!existingPlant) return;
+
+        let newImageUri = existingPlant.imageUri;
+
+        if (imageUri) {
+          const filename = `${Date.now()}-${imageUri.split('/').pop()}`;
+
+          const sourceFile = new FileSystem.File(imageUri);
+          const destinationFile = new FileSystem.File(
+            FileSystem.Paths.document,
+            filename,
+          );
+
+          await sourceFile.copy(destinationFile);
+
+          newImageUri = destinationFile.uri;
+
+          // Delete the old image after the new one has been copied successfully
+          if (existingPlant.imageUri) {
+            try {
+              const oldFile = new FileSystem.File(existingPlant.imageUri);
+
+              if (oldFile.exists) {
+                oldFile.delete();
+              }
+            } catch (error) {
+              console.warn('Failed to delete old plant image', error);
+            }
+          }
+        }
+
+        // User explicitly removed the image
+        if (removeImage && existingPlant.imageUri) {
+          try {
+            const oldFile = new FileSystem.File(existingPlant.imageUri);
+
+            if (oldFile.exists) {
+              oldFile.delete();
+            }
+          } catch (error) {
+            console.warn('Failed to delete plant image', error);
+          }
+
+          newImageUri = undefined;
+        }
+
+        set((state) => ({
+          plants: state.plants.map((plant) =>
+            plant.id === plantId
+              ? {
+                  ...plant,
+                  name,
+                  frequency,
+                  imageUri: newImageUri,
+                }
+              : plant,
+          ),
+        }));
       },
       removePlant: (plantId: string) => {
         set((state) => {
@@ -68,15 +154,17 @@ export const usePlantStore = create(
           };
         });
       },
-      waterPlant: (plantId: string) => {
+      waterPlant: (plantId: string, status: string) => {
         set((state) => {
           return {
             ...state,
             plants: state.plants.map((plant) => {
               if (plant.id === plantId) {
+                const lastUpdated =
+                  status === 'incomplete' ? undefined : Date.now();
                 return {
                   ...plant,
-                  lastWateredAtTimestamp: Date.now(),
+                  lastWateredAtTimestamp: lastUpdated,
                 };
               }
               return plant;

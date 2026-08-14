@@ -20,8 +20,8 @@ const FormButton = ({
   return (
     <Button
       className={cn(
-        className,
         `mt-2 bg-primary ${isSubmitting ? 'opacity-60' : ''}`,
+        className,
       )}
       variant="default"
       onPress={onPress}

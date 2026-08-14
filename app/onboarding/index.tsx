@@ -20,17 +20,17 @@ const OnboardingScreen = () => {
       >
         <ScreenWrapper className="w-full items-center gap-8">
           <View className="flex items-center gap-2">
-            <Text className="uppercase text-2xl font-extrabold tracking-wider text-primary">
-              Test
+            <Text className="uppercase text-2xl font-extrabold tracking-wide text-primary">
+              Test App
             </Text>
-            <Text className="text-base font-medium tracking-wide text-primary">
-              This is a test app
+            <Text className="text-base font-medium tracking-wide leading-relaxed text-primary text-center">
+              This is a test app built in React-Native
             </Text>
           </View>
           <AppLogo />
           <ConfirmOnboardingModal />
           <Link href={`/forgot-password`}>
-            <Text>Forgot password?</Text>
+            <Text className="tracking-wider">Forgot password?</Text>
           </Link>
         </ScreenWrapper>
       </LinearGradient>

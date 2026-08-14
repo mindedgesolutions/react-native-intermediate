@@ -1,13 +1,13 @@
 import ScreenHeader from '@/components/layout/ScreenHeader';
 import ScreenWrapper from '@/components/layout/ScreenWrapper';
-import { Text } from '@/components/ui/text';
+import TextWrapper from '@/components/layout/TextWrapper';
 
 const ListOrdersScreen = () => {
   return (
     <>
-      <ScreenHeader title="List of orders" />
+      <ScreenHeader title="Orders (test page)" />
       <ScreenWrapper>
-        <Text>List of orders</Text>
+        <TextWrapper>List of orders</TextWrapper>
       </ScreenWrapper>
     </>
   );

@@ -1,27 +1,35 @@
 import ScreenHeader from '@/components/layout/ScreenHeader';
-import { themeColors } from '@/theme';
 import Entypo from '@expo/vector-icons/Entypo';
-import { Image, Platform, View } from 'react-native';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { plantSchema, PlantSchema } from '@/schema/plant.schema';
-import { VStack } from '@/components/ui/vstack';
+import { themeColors } from '@/theme';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ScreenWrapper from '@/components/layout/ScreenWrapper';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Image, Platform, View } from 'react-native';
 import { Text } from '@/components/ui/text';
+import { usePlantStore } from '@/store/plant.store';
+import { VStack } from '@/components/ui/vstack';
+import { Button, ButtonText } from '@/components/ui/button';
+import { useForm } from 'react-hook-form';
+import { PlantSchema } from '@/schema/plant.schema';
+import { useEffect, useState } from 'react';
+import useShowSuccess from '@/components/alert-hooks/show.success';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FormInput from '@/components/form/FormInput';
 import FormButton from '@/components/form/FormButton';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { usePlantStore } from '@/store/plant.store';
-import { useRouter } from 'expo-router';
-import useShowSuccess from '@/components/alert-hooks/show.success';
-import { Button, ButtonText } from '@/components/ui/button';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import ConfirmPlantDeleteModal from '@/components/modals/ConfirmPlantDeleteModal';
 
-const NewPlantScreen = () => {
+const EditPlantDetails = () => {
+  const { plantId } = useLocalSearchParams();
+  const { plants, editPlant } = usePlantStore();
+  const plant = plants.find((i) => i.id === plantId);
+
+  const label =
+    plant?.name && plant?.name.length > 20
+      ? plant?.name.substring(0, 20) + ' ...'
+      : plant?.name;
+
   const [imageUri, setImageUri] = useState<string>();
-  const { addPlant } = usePlantStore();
   const router = useRouter();
   const success = useShowSuccess();
 
@@ -30,21 +38,7 @@ const NewPlantScreen = () => {
     ...form
   } = useForm<PlantSchema>({
     defaultValues: { name: '', frequency: '' },
-    mode: 'all',
-    resolver: zodResolver(plantSchema),
   });
-
-  const handleSubmit = async (data: PlantSchema) => {
-    await new Promise((t) => setTimeout(t, 1000));
-    addPlant({
-      name: data.name,
-      frequency: Number(data.frequency),
-      imageUri: imageUri ?? undefined,
-    });
-    form.reset();
-    success('Plant added successfully');
-    router.navigate(`/(home)`);
-  };
 
   const handleImage = async () => {
     if (Platform.OS === 'web') return;
@@ -61,17 +55,37 @@ const NewPlantScreen = () => {
     }
   };
 
+  const handleSubmit = async (data: PlantSchema) => {
+    await new Promise((t) => setTimeout(t, 1000));
+    editPlant({
+      name: data.name,
+      frequency: Number(data.frequency),
+      plantId: String(plantId),
+      imageUri: imageUri ?? undefined,
+      removeImage: false,
+    });
+    form.reset();
+    success('Plant added successfully');
+    router.navigate(`/(home)`);
+  };
+
   const reset = () => {
     form.reset();
     setImageUri('');
   };
 
+  useEffect(() => {
+    plant
+      ? form.reset({ name: plant.name, frequency: String(plant.frequency) })
+      : form.reset({ name: '', frequency: '' });
+  }, [plantId]);
+
   return (
     <>
       <ScreenHeader
-        title="Add new project"
-        link={`/(home)`}
-        linkText="Back to home"
+        title={plant ? `${label}` : 'Edit project details'}
+        link={`/plants/${plantId}`}
+        linkText="Back to project"
         linkIcon={
           <Entypo name="home" size={18} color={themeColors.colorWhite} />
         }
@@ -135,10 +149,15 @@ const NewPlantScreen = () => {
             <Button variant="secondary" onPress={reset}>
               <ButtonText className={themeColors.colorBlack}>Reset</ButtonText>
             </Button>
+            <ConfirmPlantDeleteModal
+              id={String(plantId)}
+              buttonOrIcon={false}
+              redirectLink={`/(home)`}
+            />
           </VStack>
         </ScreenWrapper>
       </KeyboardAwareScrollView>
     </>
   );
 };
-export default NewPlantScreen;
+export default EditPlantDetails;

@@ -5,9 +5,9 @@ export const plantSchema = z
   .object({
     name: z
       .string()
-      .nonempty('Plant name is required')
-      .max(255, 'Plant name cannot be more than 255 characters'),
-    frequency: z.string().nonempty('Frequency is required'),
+      .nonempty('Project name is required')
+      .max(255, 'Project name cannot be more than 255 characters'),
+    frequency: z.string().nonempty('Timeline is required'),
   })
   .superRefine((data, ctx) => {
     const { frequency } = data;

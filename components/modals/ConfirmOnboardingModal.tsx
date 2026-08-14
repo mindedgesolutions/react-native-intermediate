@@ -25,7 +25,7 @@ const ConfirmOnboardingModal = () => {
   const handleComplete = () => {
     setShowModal(false);
     toggleHadOnboarded();
-    success('Onboarding completed! Welcome user');
+    success('Welcome user');
     router.replace(`/(home)`);
   };
 
@@ -34,7 +34,7 @@ const ConfirmOnboardingModal = () => {
       <Button
         variant="default"
         size="default"
-        className="max-w-32 bg-app-orange-foreground"
+        className="max-w-32 bg-app-orange-foreground active:bg-app-orange-foreground/70"
         onPress={() => setShowModal(true)}
       >
         <ButtonText>Let me in!</ButtonText>
@@ -55,7 +55,10 @@ const ConfirmOnboardingModal = () => {
             </ModalCloseButton>
           </ModalHeader>
           <ModalBody>
-            <Text>Complete on boarding?</Text>
+            <Text>
+              Being a test app, login is handled using local async storage
+              instead of token
+            </Text>
           </ModalBody>
           <ModalFooter>
             <Button
@@ -69,7 +72,7 @@ const ConfirmOnboardingModal = () => {
               <ButtonText>Cancel</ButtonText>
             </Button>
             <Button size="sm" onPress={handleComplete}>
-              <ButtonText>Done!</ButtonText>
+              <ButtonText>Proceed</ButtonText>
             </Button>
           </ModalFooter>
         </ModalContent>

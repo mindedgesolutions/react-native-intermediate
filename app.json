@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "intermediate-v2",
+    "name": "Plantly",
     "slug": "intermediate-v2",
     "scheme": "intermediate-v2",
     "version": "1.0.0",
@@ -26,7 +26,16 @@
     },
     "plugins": [
       "expo-router",
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#FFFFFF"
+        }
+      ]
     ]
   }
 }

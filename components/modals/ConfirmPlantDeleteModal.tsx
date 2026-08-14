@@ -37,7 +37,7 @@ const ConfirmPlantDeleteModal = ({
   const deletePlant = () => {
     setShowModal(false);
     removePlant(id);
-    success('Plant deleted successfully');
+    success('Project deleted successfully');
     redirectLink && router.replace(redirectLink);
   };
 
@@ -52,7 +52,7 @@ const ConfirmPlantDeleteModal = ({
       ) : (
         <Button size="lg" variant="outline" onPress={() => setShowModal(true)}>
           <ButtonText className="text-sm font-bold tracking-widest">
-            Delete plant
+            Delete project
           </ButtonText>
         </Button>
       )}
@@ -72,7 +72,7 @@ const ConfirmPlantDeleteModal = ({
             </ModalCloseButton>
           </ModalHeader>
           <ModalBody>
-            <Text>Delete plant details permanently?</Text>
+            <Text>Delete project details permanently?</Text>
           </ModalBody>
           <ModalFooter>
             <Button
