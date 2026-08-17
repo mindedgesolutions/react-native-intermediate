@@ -91,12 +91,17 @@ const NewPlantScreen = () => {
             >
               <ButtonText>
                 {imageUri ? (
-                  <Image src={imageUri} width={150} height={150} />
+                  <Image
+                    src={imageUri}
+                    width={200}
+                    height={200}
+                    className="rounded-2xl"
+                  />
                 ) : (
-                  <View className="h-37.5 opacity-40">
+                  <View className="h-50 opacity-40">
                     <FontAwesome
                       name="image"
-                      size={150}
+                      size={200}
                       color={themeColors.colorLightOrage}
                     />
                   </View>

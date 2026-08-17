@@ -75,9 +75,13 @@ const EditPlantDetails = () => {
   };
 
   useEffect(() => {
-    plant
-      ? form.reset({ name: plant.name, frequency: String(plant.frequency) })
-      : form.reset({ name: '', frequency: '' });
+    if (plant) {
+      form.reset({ name: plant.name, frequency: String(plant.frequency) });
+      setImageUri(plant.imageUri);
+    } else {
+      form.reset({ name: '', frequency: '' });
+      setImageUri('');
+    }
   }, [plantId]);
 
   return (
@@ -105,12 +109,17 @@ const EditPlantDetails = () => {
             >
               <ButtonText>
                 {imageUri ? (
-                  <Image src={imageUri} width={150} height={150} />
+                  <Image
+                    src={imageUri}
+                    width={200}
+                    height={200}
+                    className="rounded-lg"
+                  />
                 ) : (
-                  <View className="h-37.5 opacity-40">
+                  <View className="h-50 opacity-40">
                     <FontAwesome
                       name="image"
-                      size={150}
+                      size={200}
                       color={themeColors.colorLightOrage}
                     />
                   </View>
