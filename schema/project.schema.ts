@@ -1,7 +1,7 @@
 import { validateNumber } from '@/utils/format.validation';
 import z from 'zod';
 
-export const plantSchema = z
+export const projectSchema = z
   .object({
     name: z
       .string()
@@ -29,7 +29,7 @@ export const plantSchema = z
       });
     }
 
-    if (timeline && validateNumber(timeline) && Number(timeline) > 200) {
+    if (timeline && validateNumber(timeline) && Number(timeline) > 365) {
       ctx.addIssue({
         code: 'custom',
         path: ['timeline'],
@@ -45,4 +45,4 @@ export const plantSchema = z
       });
     }
   });
-export type PlantSchema = z.input<typeof plantSchema>;
+export type ProjectSchema = z.input<typeof projectSchema>;

@@ -7,14 +7,14 @@ import { FlatList, View } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { themeColors } from '@/theme';
 import { Link } from 'expo-router';
-import PlantCard from '@/components/PlantCard';
-import { usePlantStore } from '@/store/plant.store';
+import ProjectCard from '@/components/ProjectCard';
+import { useProjectStore } from '@/store/project.store';
 import TextWrapper from '@/components/layout/TextWrapper';
 
 export default function App() {
   const { toggleHadOnboarded } = useUserStore();
   const success = useShowSuccess();
-  const { plants } = usePlantStore();
+  const { projects } = useProjectStore();
 
   const handleClick = () => {
     toggleHadOnboarded();
@@ -40,8 +40,8 @@ export default function App() {
           </View>
           <FlatList
             className="flex-1"
-            data={plants}
-            renderItem={({ item }) => <PlantCard plant={item} />}
+            data={projects}
+            renderItem={({ item }) => <ProjectCard project={item} />}
             contentContainerClassName="gap-4 mb-4"
           />
           <Button

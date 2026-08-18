@@ -3,50 +3,75 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import * as FileSystem from 'expo-file-system';
 
-export type PlantType = {
+export type ProjectType = {
   id: string;
   name: string;
-  frequency: number;
+  startDate: Date;
+  timeline: number;
+  projectDetails?: string;
+  otherDetails?: string;
   imageUri?: string;
   lastWateredAtTimestamp?: number;
 };
 
-type AddPlantProps = {
+type AddProjectProps = {
   name: string;
-  frequency: number;
+  startDate: Date;
+  timeline: number;
+  projectDetails?: string;
+  otherDetails?: string;
   imageUri?: string;
-  plantId?: string;
 };
 
-type EditPlantProps = {
-  plantId: string;
+type EditProjectProps = {
+  projectId: string;
   name: string;
-  frequency: number;
+  startDate: Date;
+  timeline: number;
+  projectDetails?: string;
+  otherDetails?: string;
   imageUri?: string;
   removeImage?: boolean;
 };
 
-type PlantsState = {
+type ProjectState = {
   nextId: number;
-  plants: PlantType[];
-  addPlant: ({ name, frequency, imageUri }: AddPlantProps) => void;
-  editPlant: ({
+  projects: ProjectType[];
+  addProject: ({
     name,
-    frequency,
+    startDate,
+    timeline,
+    projectDetails,
+    otherDetails,
     imageUri,
-    plantId,
+  }: AddProjectProps) => void;
+  editProject: ({
+    name,
+    startDate,
+    timeline,
+    projectDetails,
+    otherDetails,
+    imageUri,
+    projectId,
     removeImage,
-  }: EditPlantProps) => void;
-  removePlant: (plantId: string) => void;
-  waterPlant: (plantId: string, status: string) => void;
+  }: EditProjectProps) => void;
+  removeProject: (projectId: string) => void;
+  toggleProject: (projectId: string, status: string) => void;
 };
 
-export const usePlantStore = create(
-  persist<PlantsState>(
+export const useProjectStore = create(
+  persist<ProjectState>(
     (set) => ({
-      plants: [],
+      projects: [],
       nextId: 1,
-      addPlant: async ({ name, frequency, imageUri }: AddPlantProps) => {
+      addProject: async ({
+        name,
+        startDate,
+        timeline,
+        projectDetails,
+        otherDetails,
+        imageUri,
+      }: AddProjectProps) => {
         const selectedImg = imageUri
           ? new FileSystem.File(imageUri)
           : undefined;
@@ -64,28 +89,34 @@ export const usePlantStore = create(
           return {
             ...state,
             nextId: state.nextId + 1,
-            plants: [
+            projects: [
               {
                 id: String(state.nextId),
                 name,
-                frequency,
+                startDate,
+                timeline,
+                projectDetails,
+                otherDetails,
                 imageUri: savedImg ? savedImg?.uri : undefined,
               },
-              ...state.plants,
+              ...state.projects,
             ],
           };
         });
       },
-      editPlant: async ({
+      editProject: async ({
         name,
-        frequency,
+        startDate,
+        timeline,
+        projectDetails,
+        otherDetails,
         imageUri,
-        plantId,
+        projectId,
         removeImage,
-      }: EditPlantProps) => {
-        const existingPlant = usePlantStore
+      }: EditProjectProps) => {
+        const existingPlant = useProjectStore
           .getState()
-          .plants.find((plant) => plant.id === plantId);
+          .projects.find((pr) => pr.id === projectId);
 
         if (!existingPlant) return;
 
@@ -134,47 +165,50 @@ export const usePlantStore = create(
         }
 
         set((state) => ({
-          plants: state.plants.map((plant) =>
-            plant.id === plantId
+          projects: state.projects.map((project) =>
+            project.id === projectId
               ? {
-                  ...plant,
+                  ...project,
                   name,
-                  frequency,
+                  startDate,
+                  timeline,
+                  projectDetails,
+                  otherDetails,
                   imageUri: newImageUri,
                 }
-              : plant,
+              : project,
           ),
         }));
       },
-      removePlant: (plantId: string) => {
+      removeProject: (projectId: string) => {
         set((state) => {
           return {
             ...state,
-            plants: state.plants.filter((plant) => plant.id !== plantId),
+            projects: state.projects.filter((pr) => pr.id !== projectId),
           };
         });
       },
-      waterPlant: (plantId: string, status: string) => {
+      toggleProject: (projectId: string, status: string) => {
         set((state) => {
           return {
             ...state,
-            plants: state.plants.map((plant) => {
-              if (plant.id === plantId) {
+            projects: state.projects.map((project) => {
+              if (project.id === projectId) {
                 const lastUpdated =
                   status === 'incomplete' ? undefined : Date.now();
                 return {
-                  ...plant,
+                  ...project,
                   lastWateredAtTimestamp: lastUpdated,
                 };
               }
-              return plant;
+              return project;
             }),
           };
         });
       },
     }),
     {
-      name: 'plantly-plants-store',
+      name: 'project-mgmt-store',
       storage: createJSONStorage(() => AsyncStorage),
     },
   ),

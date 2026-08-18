@@ -13,7 +13,7 @@ import { Text } from '@/components/ui/text';
 import { Icon, CloseIcon } from '@/components/ui/icon';
 import { useState } from 'react';
 import useShowSuccess from '../alert-hooks/show.success';
-import { usePlantStore } from '@/store/plant.store';
+import { useProjectStore } from '@/store/project.store';
 import { themeColors } from '@/theme';
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
@@ -30,13 +30,13 @@ const ConfirmPlantDeleteModal = ({
   buttonOrIcon = true,
 }: DeletePlantProps) => {
   const [showModal, setShowModal] = useState(false);
-  const { removePlant } = usePlantStore();
+  const { removeProject } = useProjectStore();
   const success = useShowSuccess();
   const router = useRouter();
 
   const deletePlant = () => {
     setShowModal(false);
-    removePlant(id);
+    removeProject(id);
     success('Project deleted successfully');
     redirectLink && router.replace(redirectLink);
   };

@@ -1,6 +1,6 @@
 import ScreenHeader from '@/components/layout/ScreenHeader';
 import { Text } from '@/components/ui/text';
-import { usePlantStore } from '@/store/plant.store';
+import { useProjectStore } from '@/store/project.store';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { Image, ScrollView, View } from 'react-native';
 import Entypo from '@expo/vector-icons/Entypo';
@@ -15,15 +15,14 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const PlantDetails = () => {
   const { plantId } = useLocalSearchParams();
-  const { plants } = usePlantStore();
-  const { waterPlant } = usePlantStore();
+  const { projects, toggleProject } = useProjectStore();
   const success = useShowSuccess();
   const router = useRouter();
 
-  const plant = plants.find((i) => i.id === plantId);
+  const project = projects.find((i) => i.id === plantId);
 
   const handleSubmit = (status: string) => {
-    waterPlant(String(plantId), status);
+    toggleProject(String(plantId), status);
     success(`Project status is marked as ${status}`);
     router.replace(`/`);
   };
@@ -31,7 +30,7 @@ const PlantDetails = () => {
   return (
     <>
       <ScreenHeader
-        title={plant?.name || 'Plant details'}
+        title={project?.name || 'Project details'}
         link={`/(home)`}
         linkIcon={
           <Entypo name="home" size={20} color={themeColors.colorWhite} />
@@ -41,9 +40,9 @@ const PlantDetails = () => {
       <ScrollView>
         <ScreenWrapper className="mt-8">
           <View className="flex justify-center items-center gap-8">
-            {plant?.imageUri ? (
+            {project?.imageUri ? (
               <Image
-                src={plant?.imageUri}
+                src={project?.imageUri}
                 width={250}
                 height={250}
                 className="rounded-2xl"
@@ -54,7 +53,7 @@ const PlantDetails = () => {
               </View>
             )}
             <View className="flex flex-row justify-center items-center gap-2">
-              {plant?.lastWateredAtTimestamp ? (
+              {project?.lastWateredAtTimestamp ? (
                 <MaterialIcons
                   name="verified"
                   size={20}
@@ -62,7 +61,7 @@ const PlantDetails = () => {
                 />
               ) : undefined}
               <Text className="text-xl font-bold text-app-orange-foreground tracking-wider uppercase">
-                {plant?.name}
+                {project?.name}
               </Text>
             </View>
             <View className="flex justify-center items-center gap-2">
@@ -71,24 +70,27 @@ const PlantDetails = () => {
               </Text>
 
               <Text className="text-base font-medium tracking-wider">
-                {plant?.frequency} day(s)
+                {project?.timeline} day(s)
               </Text>
             </View>
             <Text className="text-base font-medium tracking-wider">
               Last updated on:{' '}
-              {plant?.lastWateredAtTimestamp
-                ? format(new Date(plant?.lastWateredAtTimestamp), 'dd/MM/yyyy')
+              {project?.lastWateredAtTimestamp
+                ? format(
+                    new Date(project?.lastWateredAtTimestamp),
+                    'dd/MM/yyyy',
+                  )
                 : `N/A`}
             </Text>
             <View className="flex gap-4">
-              <Link href={`/plants/${plant?.id}/edit`} asChild>
+              <Link href={`/plants/${project?.id}/edit`} asChild>
                 <Button size="lg" variant="default">
                   <ButtonText className="text-sm tracking-widest">
                     Edit project
                   </ButtonText>
                 </Button>
               </Link>
-              {!plant?.lastWateredAtTimestamp && (
+              {!project?.lastWateredAtTimestamp && (
                 <Button
                   size="lg"
                   className="bg-app-orange-foreground active:bg-app-orange-foreground/70"
@@ -99,7 +101,7 @@ const PlantDetails = () => {
                   </ButtonText>
                 </Button>
               )}
-              {plant?.lastWateredAtTimestamp && (
+              {project?.lastWateredAtTimestamp && (
                 <Button
                   size="lg"
                   className="bg-app-orange-foreground active:bg-app-orange-foreground/70"

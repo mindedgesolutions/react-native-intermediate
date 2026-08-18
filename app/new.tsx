@@ -4,14 +4,14 @@ import Entypo from '@expo/vector-icons/Entypo';
 import { Image, Platform, View } from 'react-native';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { plantSchema, PlantSchema } from '@/schema/plant.schema';
+import { projectSchema, type ProjectSchema } from '@/schema/project.schema';
 import { VStack } from '@/components/ui/vstack';
 import ScreenWrapper from '@/components/layout/ScreenWrapper';
 import { Text } from '@/components/ui/text';
 import FormInput from '@/components/form/FormInput';
 import FormButton from '@/components/form/FormButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { usePlantStore } from '@/store/plant.store';
+import { useProjectStore } from '@/store/project.store';
 import { useRouter } from 'expo-router';
 import useShowSuccess from '@/components/alert-hooks/show.success';
 import { Button, ButtonText } from '@/components/ui/button';
@@ -26,28 +26,37 @@ import FormDatepicker from '@/components/form/FormDatepicker';
 
 const NewPlantScreen = () => {
   const [imageUri, setImageUri] = useState<string>();
-  const { addPlant } = usePlantStore();
+  const { addProject } = useProjectStore();
   const router = useRouter();
   const success = useShowSuccess();
 
   const {
     formState: { errors, isSubmitting },
     ...form
-  } = useForm<PlantSchema>({
-    defaultValues: { name: '', startDate: undefined, timeline: '' },
+  } = useForm<ProjectSchema>({
+    defaultValues: {
+      name: '',
+      startDate: undefined,
+      timeline: '',
+      projectDetails: '',
+      otherDetails: '',
+    },
     mode: 'all',
-    resolver: zodResolver(plantSchema),
+    resolver: zodResolver(projectSchema),
   });
 
-  const handleSubmit = async (data: PlantSchema) => {
-    await new Promise((t) => setTimeout(t, 1000));
-    // addPlant({
-    //   name: data.name,
-    //   timeline: Number(data.timeline),
-    //   imageUri: imageUri ?? undefined,
-    // });
+  const handleSubmit = async (data: ProjectSchema) => {
+    await new Promise((t) => setTimeout(t, 300));
+    addProject({
+      name: data.name,
+      startDate: data.startDate as Date,
+      timeline: Number(data.timeline),
+      projectDetails: data.projectDetails ?? undefined,
+      otherDetails: data.otherDetails ?? undefined,
+      imageUri: imageUri ?? undefined,
+    });
     form.reset();
-    success('Plant added successfully');
+    success('Project added successfully');
     router.navigate(`/(home)`);
   };
 

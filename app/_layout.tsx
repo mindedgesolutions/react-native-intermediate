@@ -12,7 +12,6 @@ const RootLayout = () => {
             name="new"
             options={{
               presentation: 'containedModal',
-              title: 'New plant',
               animation: 'slide_from_bottom',
             }}
           />
