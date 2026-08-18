@@ -1,5 +1,7 @@
 This is a repository for a start / intermediate React-Native using Uniwind CSS and Gluestack UI library along with Zod validation. The main highlight of this repo are:
 1. Completely custom datepicker component (Not Gluestack UI standard datepicker)
+2. Modal confirmation
+3. Toast alerts
 
 I will keep adding more and more code. Below is how I setup the entire project. Feel free to customize as per requirements:
 1.  npm create expo-app -- taskly --template
