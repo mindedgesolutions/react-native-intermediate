@@ -59,6 +59,8 @@ type ProjectState = {
   toggleProject: (projectId: string, status: string) => void;
 };
 
+// Store name changed
+
 export const useProjectStore = create(
   persist<ProjectState>(
     (set) => ({
