@@ -18,6 +18,11 @@ import { Button, ButtonText } from '@/components/ui/button';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FormRequired from '@/components/form/FormRequired';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import FormTextarea from '@/components/form/FormTextarea';
+import FormDatepicker from '@/components/form/FormDatepicker';
 
 const NewPlantScreen = () => {
   const [imageUri, setImageUri] = useState<string>();
@@ -29,18 +34,18 @@ const NewPlantScreen = () => {
     formState: { errors, isSubmitting },
     ...form
   } = useForm<PlantSchema>({
-    defaultValues: { name: '', frequency: '' },
+    defaultValues: { name: '', startDate: undefined, timeline: '' },
     mode: 'all',
     resolver: zodResolver(plantSchema),
   });
 
   const handleSubmit = async (data: PlantSchema) => {
     await new Promise((t) => setTimeout(t, 1000));
-    addPlant({
-      name: data.name,
-      frequency: Number(data.frequency),
-      imageUri: imageUri ?? undefined,
-    });
+    // addPlant({
+    //   name: data.name,
+    //   timeline: Number(data.timeline),
+    //   imageUri: imageUri ?? undefined,
+    // });
     form.reset();
     success('Plant added successfully');
     router.navigate(`/(home)`);
@@ -109,26 +114,78 @@ const NewPlantScreen = () => {
               </ButtonText>
             </Button>
             <View>
-              <Text className="text-primary">Name of the project</Text>
+              <View className="flex flex-row gap-1">
+                <Text className="text-primary">Name of the project</Text>
+                <FormRequired />
+              </View>
               <FormInput
                 control={form.control}
                 name="name"
                 placeholder="Enter name of the project"
                 returnKeyType="next"
                 errorMsg={errors.name?.message}
+                iconPosition="right"
+                icon={
+                  <Ionicons
+                    name="briefcase-outline"
+                    size={20}
+                    color={themeColors.colorLightGray}
+                  />
+                }
               />
             </View>
             <View>
-              <Text className="text-primary">
-                Tentative complition timeline (in days)
-              </Text>
+              <View className="flex flex-row gap-1">
+                <Text className="text-primary">Tentative start date</Text>
+                <FormRequired />
+              </View>
+              <FormDatepicker
+                control={form.control}
+                name="startDate"
+                minYear={new Date().getFullYear() - 5}
+                maxYear={new Date().getFullYear() + 5}
+              />
+            </View>
+            <View>
+              <View className="flex flex-row gap-1">
+                <Text className="text-primary">
+                  Tentative complition timeline (in days)
+                </Text>
+                <FormRequired />
+              </View>
               <FormInput
                 control={form.control}
-                name="frequency"
+                name="timeline"
                 placeholder="Enter timeline"
                 returnKeyType="done"
                 keyboardType="number-pad"
-                errorMsg={errors.frequency?.message}
+                errorMsg={errors.timeline?.message}
+                iconPosition="right"
+                icon={
+                  <AntDesign
+                    name="clock-circle"
+                    size={20}
+                    color={themeColors.colorLightGray}
+                  />
+                }
+              />
+            </View>
+            <View>
+              <Text className="text-primary">Project details</Text>
+              <FormTextarea
+                control={form.control}
+                name="projectDetails"
+                placeholder="Enter timeline"
+                errorMsg={errors.projectDetails?.message}
+              />
+            </View>
+            <View>
+              <Text className="text-primary">Other details</Text>
+              <FormTextarea
+                control={form.control}
+                name="otherDetails"
+                placeholder="Enter timeline"
+                errorMsg={errors.otherDetails?.message}
               />
             </View>
             <FormButton

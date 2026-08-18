@@ -5,4 +5,5 @@ export const themeColors = {
   colorWhite: '#fff',
   colorBlack: '#000',
   colorRed: '#dc2626',
+  colorLightGray: '#d1d5db', // gray-300
 };

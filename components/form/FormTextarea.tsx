@@ -1,6 +1,5 @@
 import { Control, Controller, FieldValues, Path } from 'react-hook-form';
-import { Input, InputField, InputSlot } from '../ui/input';
-import { KeyboardTypeOptions, ReturnKeyTypeOptions } from 'react-native';
+import { Textarea, TextareaInput } from '../ui/textarea';
 import { Text } from '../ui/text';
 
 type FormInputProps<T extends FieldValues> = {
@@ -8,21 +7,13 @@ type FormInputProps<T extends FieldValues> = {
   control: Control<T>;
   errorMsg?: string;
   placeholder?: string;
-  keyboardType?: KeyboardTypeOptions | undefined;
-  returnKeyType?: ReturnKeyTypeOptions | undefined;
-  iconPosition?: 'right' | 'left';
-  icon?: React.ReactNode;
 };
 
-const FormInput = <T extends FieldValues>({
+const FormTextarea = <T extends FieldValues>({
   name,
   control,
   errorMsg,
   placeholder,
-  keyboardType,
-  returnKeyType,
-  iconPosition,
-  icon: Icon,
 }: FormInputProps<T>) => {
   return (
     <>
@@ -30,19 +21,14 @@ const FormInput = <T extends FieldValues>({
         control={control}
         name={name}
         render={({ field }) => (
-          <Input className="my-1">
-            {iconPosition === 'left' && <InputSlot>{Icon}</InputSlot>}
-            <InputField
-              type="text"
+          <Textarea size="sm">
+            <TextareaInput
               placeholder={placeholder || 'Enter details'}
               value={field.value}
               onChangeText={field.onChange}
               onBlur={field.onBlur}
-              returnKeyType={returnKeyType}
-              keyboardType={keyboardType}
             />
-            {iconPosition === 'right' && <InputSlot>{Icon}</InputSlot>}
-          </Input>
+          </Textarea>
         )}
       />
       {errorMsg ? (
@@ -51,4 +37,4 @@ const FormInput = <T extends FieldValues>({
     </>
   );
 };
-export default FormInput;
+export default FormTextarea;
