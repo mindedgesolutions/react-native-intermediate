@@ -153,6 +153,7 @@ const NewPlantScreen = () => {
                 name="startDate"
                 minYear={new Date().getFullYear() - 5}
                 maxYear={new Date().getFullYear() + 5}
+                error={errors.startDate?.message}
               />
             </View>
             <View>

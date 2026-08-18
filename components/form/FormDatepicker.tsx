@@ -17,6 +17,7 @@ const FormDatepicker = <T extends FieldValues>({
   error,
   ...props
 }: FormDatePickerProps<T>) => {
+  console.log(error);
   return (
     <>
       <Controller
@@ -30,9 +31,7 @@ const FormDatepicker = <T extends FieldValues>({
           />
         )}
       />
-      {error ? (
-        <Text className="text-destructive text-sm">{error}</Text>
-      ) : undefined}
+      {error && <Text className="text-destructive text-sm">{error}</Text>}
     </>
   );
 };
